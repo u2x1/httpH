@@ -16,7 +16,7 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
-    README.md
+    README
 
 source-repository head
   type: git
@@ -24,12 +24,13 @@ source-repository head
 
 library
   exposed-modules:
-      Config.Type
       Control.ExceptT
+      Data.Response
       Server.Handler
       Server.Parser
       Server.Server
       Server.Type
+      Server.Type.Internal
       Utils.ByteString
       Utils.Misc
   other-modules:
@@ -42,7 +43,6 @@ library
     , base >=4.7 && <5
     , bytestring
     , directory
-    , filepath
     , network
     , time
     , utf8-string
@@ -62,7 +62,6 @@ executable httpH-exe
     , base >=4.7 && <5
     , bytestring
     , directory
-    , filepath
     , httpH
     , network
     , time
@@ -84,7 +83,6 @@ test-suite httpH-test
     , base >=4.7 && <5
     , bytestring
     , directory
-    , filepath
     , httpH
     , network
     , time

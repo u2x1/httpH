@@ -2,30 +2,30 @@
 module Server.Parser where
 
 import           Control.Applicative        ((<|>))
-import           Control.ExceptT
+import           Control.ExceptT            (ExceptT (ExceptT),
+                                             MonadTrans (lift))
 import           Data.Attoparsec.ByteString
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString            as BS
-import           Data.Char                  (ord)
 import           Data.Word                  (Word8)
 import           Server.Type
-import           Utils.ByteString
+import           Utils.ByteString           (toLower)
 
 type ParserEx = ExceptT Error Parser
 
 request :: ParserEx Request
 request = do
-  reqLine' <- reqLine
+  (method', uri', version') <- reqLine
   headers' <- headers
   reqBody' <- lift takeByteString
-  return (Request reqLine' headers' reqBody')
+  return (Request method' uri' version' headers' reqBody')
 
-reqLine :: ParserEx RequestLine
+reqLine :: ParserEx (RequestMethod, ByteString, HTTPVersion)
 reqLine = do
   method' <- ExceptT $ getMethod <$> takeTill (== sp) <* takeTill (/= sp)
   uri' <- ExceptT $ checkUri <$> takeTill (== sp) <* takeTill (/= sp)
   version' <- ExceptT $ getVersion <$> takeTill (== sp) <* takeTill (/= sp)
-  return (RequestLine method' uri' version')
+  return (method', uri', version')
   where
     getMethod str = case str of
               "GET"  -> Right GET
@@ -46,13 +46,6 @@ reqLine = do
     checkUri str = if any prefixWithDot (BS.split 47 str)
                       then Left (Error 1001 "UNSAFE URI")
                       else Right str
-
-lf :: Word8
-lf = 10
-cr :: Word8
-cr = 13
-sp :: Word8
-sp = 32
 
 headers :: ParserEx [Header]
 headers = lift $ many' $ do
@@ -79,3 +72,10 @@ headers = lift $ many' $ do
                       "content-encoding"  -> ContentEncoding
                       "content-language"  -> ContentLanguage
                       _                   -> UnknownHeader
+
+lf :: Word8
+cr :: Word8
+sp :: Word8
+lf = 10       -- '\n'
+cr = 13       -- '\r'
+sp = 32       -- ' '

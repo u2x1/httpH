@@ -7,7 +7,7 @@ maintainer:          "example@example.com"
 copyright:           "2020 Author name here"
 
 extra-source-files:
-- README.md
+- README
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -27,7 +27,6 @@ dependencies:
 - utf8-string
 - attoparsec
 - aeson
-- filepath
 - zlib
 
 library:
