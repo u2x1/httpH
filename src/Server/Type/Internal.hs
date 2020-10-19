@@ -27,9 +27,8 @@ data HTTPVersion = HTTP09
 
 
 data RequestMethod = GET
-                   | POST
-                   | HEAD
-                   | NullMethod
+                  --  | POST
+                  --  | HEAD
   deriving (Show, Eq)
 
 data Header = Header HeaderName ByteString
@@ -39,15 +38,15 @@ data HeaderName =
                 -- General header
                 Date | Connection | CacheControl
                 -- Request header
-                | Accept | AcceptLanguage | AcceptEncoding
-                | Referer | Cookie | UserAgent
-                | IfModifiedSince | IfNoneMatch | Host
+                | Accept  | AcceptLanguage  | AcceptEncoding
+                | Referer | Cookie          | UserAgent
+                | Host    | IfModifiedSince | IfNoneMatch
 
                 -- Entity header
                 | ContentLength | ContentEncoding | ContentLanguage
-                | ContentType
+                | ContentType   | LastModified
 
-                | UnknownHeader
+                | UnknownHeader -- save this to ignore unknown headers instead of throwing exceptions
   deriving (Show, Eq)
 
 data Error = Error Integer ByteString

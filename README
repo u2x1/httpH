@@ -1,12 +1,8 @@
 # httpH
 
-slow as turtle, vulnerable as hell.
+static web server base on socket.
 
-work in fuckin' progress but i have very little time
-
-## error
-
-code        msg
-==================================
-1001        unsafe uri
-1002        wrong date format
+TODO:
+  - HTTP/1.0, HTTP/0.9 (DONE)
+  - HTTP/1.1           (WIP)
+  - HTTP/2.0
